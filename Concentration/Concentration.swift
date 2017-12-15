@@ -53,11 +53,25 @@ class Concentration {
         // TODO: Shuffle Card
         var shuffledArray = Array<Card>()
         for _ in cards.indices {
-            let randomIndex = Int(arc4random_uniform(UInt32(cards.count)))
-            shuffledArray.append(cards[randomIndex])
-            cards.remove(at: randomIndex)
+            let randomNumber = cards.count.randomIndex
+            shuffledArray.append(cards[randomNumber])
+            cards.remove(at: randomNumber)
         }
         cards = shuffledArray
     }
 
+}
+extension Int {
+    var randomIndex: Int {
+        if self > 0 {
+            return Int(arc4random_uniform(UInt32(self)))
+        } else {
+            if self < 0 {
+                return Int(arc4random_uniform(UInt32(abs(self))))
+                
+            } else  {
+                return 0
+            }
+        }        
+    }
 }
