@@ -11,6 +11,8 @@ import Foundation
 class Concentration {
     var cards = Array<Card>()
     
+    var flipCount = 0
+    
     var indexOfOneAndOnlyFaceUpCard: Int?
     
     func chooseCard(at index: Int){
@@ -26,12 +28,21 @@ class Concentration {
             } else {
                 // either no cards or 2 cards are face up
                 for flipDownIndex in cards.indices {
-                    cards[flipDownIndex] .isFaceUp = false
+                    cards[flipDownIndex].isFaceUp = false
                 }
                 cards[index].isFaceUp = true
                 indexOfOneAndOnlyFaceUpCard = index
             }
+        flipCount += 1
         }
+    }
+    
+    func resetGame() {
+        for index in cards.indices {
+            cards[index].isFaceUp = false
+            cards[index].isMatched = false
+        }
+        flipCount = 0
     }
         
     init (numberOfPairsOfCards: Int) {
