@@ -9,11 +9,11 @@
 import Foundation
 
 class Concentration {
-    var cards = Array<Card>()
+    private(set) var cards = Array<Card>()
     
     var flipCount = 0
     
-    var indexOfOneAndOnlyFaceUpCard: Int? {
+    private var indexOfOneAndOnlyFaceUpCard: Int? {
         get {
             var foundIndex : Int?
             for index in cards.indices {
@@ -37,7 +37,8 @@ class Concentration {
     } 
     
     func chooseCard(at index: Int){
-        if !cards[index].isMatched {
+        assert(cards.indices.contains(index), "Concentration.chooseCard (at: \(index)) : chossen index not in the cards")
+            if !cards[index].isMatched {
             if let matchIndex = indexOfOneAndOnlyFaceUpCard, matchIndex != index {
                 // check if cards match
                 if cards[matchIndex].identifier == cards[index].identifier {
@@ -62,6 +63,7 @@ class Concentration {
     }
         
     init (numberOfPairsOfCards: Int) {
+        assert(numberOfPairsOfCards > 0,"Concentration.init \(numberOfPairsOfCards): you must have at least one pair of cards")
             for _ in 0..<numberOfPairsOfCards {
                 let card = Card()
                 cards += [card, card]
@@ -69,7 +71,7 @@ class Concentration {
         // TODO: Shuffle Card
         var shuffledArray = Array<Card>()
         for _ in cards.indices {
-            let randomNumber = cards.count.randomIndex
+            let randomNumber = cards.count.arc4random
             shuffledArray.append(cards[randomNumber])
             cards.remove(at: randomNumber)
         }
@@ -78,12 +80,12 @@ class Concentration {
 
 }
 extension Int {
-    var randomIndex: Int {
+    var arc4random: Int {
         if self > 0 {
             return Int(arc4random_uniform(UInt32(self)))
         } else {
             if self < 0 {
-                return Int(arc4random_uniform(UInt32(abs(self))))
+                return -Int(arc4random_uniform(UInt32(abs(self))))
                 
             } else  {
                 return 0
